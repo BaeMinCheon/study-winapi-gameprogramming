@@ -1,5 +1,5 @@
-_STUDY_GameProgwithWinAPI
-=========================
+_GameAdvanced_WinAPI
+====================
 
 ---
 
