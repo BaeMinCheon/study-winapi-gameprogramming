@@ -284,7 +284,7 @@ HRESULT __stdcall OnPaint(_In_ HWND p_hWnd)
 	if (bStart)
 	{
 		Tetris::UpdateBlock(FALSE);
-		Tetris::Draw();
+		Tetris::Draw(hCom);
 	}
 	else
 	{

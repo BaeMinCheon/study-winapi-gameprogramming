@@ -3,10 +3,14 @@
 BOOL Tetris::bBlocks[10 * 20] = { FALSE };
 BOOL Tetris::bMoves[10 * 20] = { FALSE };
 BOOL Tetris::bTemps[10 * 20] = { FALSE };
-int Tetris::timeUpdate = 1000;
 
-VOID Tetris::Draw(VOID)
+int Tetris::timeUpdate = 1000;
+int Tetris::nScore = 0;
+
+VOID Tetris::Draw(HDC hDC)
 {
+	static WCHAR sz[20] = { 0 };
+
 	MyClear(TRUE);
 
 #pragma omp parallel for
@@ -49,6 +53,10 @@ VOID Tetris::Draw(VOID)
 	}
 
 	MyFinish();
+
+	wsprintfW(sz, L"- SCORE : %d", nScore);
+	TextOutW(hDC, 224, 17, sz, lstrlenW(sz));
+
 	return;
 }
 
@@ -259,6 +267,8 @@ VOID Tetris::RotateBlock(VOID)
 		Y = 20,
 		CX = 0,
 		CY = 0;
+
+	memset(bTemps, 0, sizeof(BOOL) * 10 * 20);
 
 	for (int x = 0; x < 10; ++x)
 	{
