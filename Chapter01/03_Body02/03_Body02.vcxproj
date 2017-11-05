@@ -146,6 +146,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="System.cpp" />
+    <ClCompile Include="Tetris.cpp" />
+    <ClCompile Include="TetrisTitle.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="System.h" />
+    <ClInclude Include="Tetris.h" />
+    <ClInclude Include="TetrisTitle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
