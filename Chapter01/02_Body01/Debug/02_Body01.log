@@ -1,0 +1,10 @@
+﻿  TetrisTitle.cpp
+  Tetris.cpp
+c:\users\zeble\documents\visual studio 2015\projects\[study] gamemakingproject\1 - tetris\chapter01\02_body01\tetris.cpp(60): warning C4018: '>=': signed 또는 unsigned가 일치하지 않습니다.
+  System.cpp
+c:\users\zeble\documents\visual studio 2015\projects\[study] gamemakingproject\1 - tetris\chapter01\02_body01\system.cpp(44): warning C4302: '형식 캐스팅': 'LPWSTR'에서 'WORD'(으)로 잘립니다.
+c:\users\zeble\documents\visual studio 2015\projects\[study] gamemakingproject\1 - tetris\chapter01\02_body01\system.cpp(45): warning C4302: '형식 캐스팅': 'LPWSTR'에서 'WORD'(으)로 잘립니다.
+  Graphics.cpp
+  코드를 생성하고 있습니다...
+  02_Body01.vcxproj -> C:\Users\zeble\Documents\Visual Studio 2015\Projects\[STUDY] GameMakingProject\1 - Tetris\Chapter01\Debug\02_Body01.exe
+  02_Body01.vcxproj -> C:\Users\zeble\Documents\Visual Studio 2015\Projects\[STUDY] GameMakingProject\1 - Tetris\Chapter01\Debug\02_Body01.pdb (Full PDB)

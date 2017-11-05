@@ -1,0 +1,4 @@
+﻿  Tetris.cpp
+c:\users\zeble\documents\visual studio 2015\projects\[study] gamemakingproject\1 - tetris\chapter01\03_body02\tetris.cpp(68): warning C4018: '>=': signed 또는 unsigned가 일치하지 않습니다.
+  03_Body02.vcxproj -> C:\Users\zeble\Documents\Visual Studio 2015\Projects\[STUDY] GameMakingProject\1 - Tetris\Chapter01\Debug\03_Body02.exe
+  03_Body02.vcxproj -> C:\Users\zeble\Documents\Visual Studio 2015\Projects\[STUDY] GameMakingProject\1 - Tetris\Chapter01\Debug\03_Body02.pdb (Full PDB)
