@@ -8,6 +8,7 @@ namespace Scene
 	{
 	public:
 		static Button* pCardPlaying;
+		static Button* pSpiderCard;
 
 		static VOID Initialize(HWND hWnd);
 		static VOID Release(VOID);

@@ -60,7 +60,8 @@ VOID Button::Update(VOID)
 		bHover = FALSE;
 	}
 
-	if (GetKeyState(VK_LBUTTON) & 0x8000)
+	if ((GetKeyState(VK_LBUTTON) & 0x8000)
+		&& GetActiveWindow() == hWnd)
 	{
 		if (bHover && !bPrevClick)
 		{

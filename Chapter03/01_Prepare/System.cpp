@@ -7,6 +7,8 @@
 
 #include "Sequence.h"
 #include "Title.h"
+#include "CardPlaying.h"
+#include "SpiderCard.h"
 
 HDC hDC, hCom;
 HBITMAP hBack = NULL, hOld = NULL;
@@ -261,12 +263,12 @@ HRESULT __stdcall OnPaint(_In_ HWND p_hWnd)
 		Scene::Title::Draw(hCom);
 		break;
 	case Sequence::CardPlaying:
-		MyClear();
-		MyFinish();
+		Scene::CardPlaying::Update();
+		Scene::CardPlaying::Draw(hCom);
 		break;
 	case Sequence::SpiderCard:
-		MyClear();
-		MyFinish();
+		Scene::SpiderCard::Update();
+		Scene::SpiderCard::Draw(hCom);
 		break;
 	}
 

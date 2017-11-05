@@ -147,14 +147,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="CardPlaying.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Sequence.h" />
+    <ClInclude Include="SpiderCard.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Title.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="CardPlaying.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="SpiderCard.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Title.cpp" />
   </ItemGroup>

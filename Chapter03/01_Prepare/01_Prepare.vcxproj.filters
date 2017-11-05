@@ -30,6 +30,12 @@
     <ClInclude Include="Button.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="CardPlaying.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SpiderCard.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics.cpp">
@@ -42,6 +48,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CardPlaying.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SpiderCard.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
