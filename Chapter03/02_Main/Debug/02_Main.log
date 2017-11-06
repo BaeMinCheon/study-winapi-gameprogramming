@@ -1,0 +1,7 @@
+﻿  System.cpp
+c:\users\zeble\documents\visual studio 2015\projects\[study] gamemakingproject\3 - card\chapter03\02_main\system.cpp(48): warning C4302: '형식 캐스팅': 'LPWSTR'에서 'WORD'(으)로 잘립니다.
+c:\users\zeble\documents\visual studio 2015\projects\[study] gamemakingproject\3 - card\chapter03\02_main\system.cpp(49): warning C4302: '형식 캐스팅': 'LPWSTR'에서 'WORD'(으)로 잘립니다.
+  CardPlaying.cpp
+  코드를 생성하고 있습니다...
+  02_Main.vcxproj -> C:\Users\zeble\Documents\Visual Studio 2015\Projects\[STUDY] GameMakingProject\3 - Card\Chapter03\Debug\02_Main.exe
+  02_Main.vcxproj -> C:\Users\zeble\Documents\Visual Studio 2015\Projects\[STUDY] GameMakingProject\3 - Card\Chapter03\Debug\02_Main.pdb (Full PDB)
