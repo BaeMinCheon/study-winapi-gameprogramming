@@ -32,6 +32,7 @@ namespace Scene
 		static MyImage* pImgList[13 * 4 + 1];
 
 		static INT nCards[13 * 25];
+		static INT nCardBacks[6];
 
 		static VOID Initialize(HWND hWnd);
 		static VOID Release(VOID);

@@ -5,6 +5,7 @@ using namespace Scene;
 MyImage* CardPlaying::pImgList[13 * 4 + 1] = { NULL };
 
 INT CardPlaying::nCards[13 * 25] = { 0 };
+INT CardPlaying::nCardBacks[6] = { 0 };
 
 VOID CardPlaying::Initialize(HWND hWnd)
 {
@@ -62,6 +63,10 @@ VOID CardPlaying::Initialize(HWND hWnd)
 	{
 		nCards[0 * 25 + x] = nArr[28 + x];
 	}
+	for (int x = 0; x < 6; ++x)
+	{
+		nCardBacks[x] = x + 1;
+	}
 
 	WCHAR szStr[20] = { 0 };
 	WCHAR* szNumber[] = { L"0", L"1", L"2", L"3", L"4", L"5", L"6", L"7", L"8", L"9", L"10", L"11", L"12" };
@@ -115,7 +120,7 @@ VOID CardPlaying::Draw(HDC hDC)
 	// draw deck
 	if (nCards[0 * (13 + 6) + 0] != -1)
 	{
-		MyDrawImage(pImgList[CardBack], 15, 15, 110, 150);
+		MyDrawImage(pImgList[CardBack], 7, 7, 110, 150);
 	}
 	// draw pos #1
 	for (int x = 0; x < 26; ++x)
@@ -165,7 +170,14 @@ VOID CardPlaying::Draw(HDC hDC)
 		{
 			if (nCards[(6 + y) * 25 + x] != -1)
 			{
-				MyDrawImage(pImgList[nCards[(6 + y) * 25 + x]], 7 + (2 + 110)*y, 7 + 150 + (x * 25), 110, 150);
+				if (y != 0 && x < nCardBacks[y - 1])
+				{
+					MyDrawImage(pImgList[CardBack], 7 + (2 + 110)*y, 7 + 150 + (x * 25), 110, 150);
+				}
+				else
+				{
+					MyDrawImage(pImgList[nCards[(6 + y) * 25 + x]], 7 + (2 + 110)*y, 7 + 150 + (x * 25), 110, 150);
+				}
 			}
 			else
 			{
