@@ -115,6 +115,8 @@ VOID CardPlaying::Update(VOID)
 
 VOID CardPlaying::Draw(HDC hDC)
 {
+	UINT iHeight = 0;
+
 	MyClear();
 
 	// draw deck
@@ -163,20 +165,23 @@ VOID CardPlaying::Draw(HDC hDC)
 			}
 		}
 	}
-	//
+	// draw stacks
 	for (int y = 0; y < 7; ++y)
 	{
+		iHeight = 0;
 		for (int x = 0; x < 25; ++x)
 		{
 			if (nCards[(6 + y) * 25 + x] != -1)
 			{
 				if (y != 0 && x < nCardBacks[y - 1])
 				{
-					MyDrawImage(pImgList[CardBack], 7 + (2 + 110)*y, 7 + 150 + (x * 25), 110, 150);
+					MyDrawImage(pImgList[CardBack], 7 + (2 + 110)*y, 7 + 150 + iHeight, 110, 150);
+					iHeight += 10;
 				}
 				else
 				{
-					MyDrawImage(pImgList[nCards[(6 + y) * 25 + x]], 7 + (2 + 110)*y, 7 + 150 + (x * 25), 110, 150);
+					MyDrawImage(pImgList[nCards[(6 + y) * 25 + x]], 7 + (2 + 110)*y, 7 + 150 + iHeight, 110, 150);
+					iHeight += 25;
 				}
 			}
 			else
