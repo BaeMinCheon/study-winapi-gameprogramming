@@ -95,10 +95,6 @@ VOID CardPlaying::Initialize(HWND hWnd)
 	}
 	pImgList[13 * 4] = MyLoadImage(L"Back.raw", 110, 150);
 
-	nCards[1 * 25 + 0] = CardSpade + CardTwo;
-	nCards[1 * 25 + 1] = CardSpade + CardThree;
-	nCards[1 * 25 + 2] = CardDiamond + CardTwo;
-
 	return;
 }
 
@@ -135,6 +131,30 @@ VOID CardPlaying::Draw(HDC hDC)
 				MyDrawImage(pImgList[nCards[1 * 25 + x - 1]], 15 + (15 + 110) * 1, 15, 110, 150);
 			}
 			break;
+		}
+	}
+
+	for (int y = 0; y < 4; ++y)
+	{
+		for (int x = 0; x < 14; ++x)
+		{
+			if (x == 13)
+			{
+				MyDrawImage(pImgList[nCards[(2 + y) * 25 + 12]], 7 + (2 + 110)*(3 + y), 7, 110, 150);
+				break;
+			}
+			else if (nCards[(2 + y) * 25 + x] == -1)
+			{
+				if (x != 0)
+				{
+					MyDrawImage(pImgList[nCards[(2 + y) * 25 + x - 1]], 7 + (2 + 110)*(3 + y), 7, 110, 150);
+				}
+				else
+				{
+					MyDrawImage(pImgList[CardBack], 7 + (2 + 110)*(3 + y), 7, 110, 150);
+				}
+				break;
+			}
 		}
 	}
 
