@@ -36,8 +36,11 @@ namespace Scene
 		static INT nCardSelects[13];
 
 		static HWND hWnd;
+		static POINT ptCursor;
 		static BOOL bClick;
 		static BOOL bPrevClick;
+		static SHORT nStack;
+		static SHORT nIndex;
 
 		static VOID Initialize(HWND hWnd);
 		static VOID Release(VOID);

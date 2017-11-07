@@ -9,8 +9,11 @@ INT CardPlaying::nCardBacks[6] = { 0 };
 INT CardPlaying::nCardSelects[13] = { 0 };
 
 HWND CardPlaying::hWnd = NULL;
+POINT CardPlaying::ptCursor = { 0,0 };
 BOOL CardPlaying::bClick = FALSE;
 BOOL CardPlaying::bPrevClick = FALSE;
+SHORT CardPlaying::nStack = 0;
+SHORT CardPlaying::nIndex = 0;
 
 VOID CardPlaying::Initialize(HWND hWnd)
 {
@@ -121,8 +124,6 @@ VOID CardPlaying::Release(VOID)
 
 VOID CardPlaying::Update(VOID)
 {
-	POINT ptCursor = { 0, 0 };
-
 	if ((GetKeyState(VK_LBUTTON) & 0x8000) && (GetActiveWindow() == hWnd))
 	{
 		GetCursorPos(&ptCursor);
@@ -132,6 +133,7 @@ VOID CardPlaying::Update(VOID)
 		{
 			for (int x = 0; x < 7; ++x)
 			{
+				// stack where below deck
 				if (x == 0)
 				{
 					if (ptCursor.x >= 7 && ptCursor.x <= 117)
@@ -147,10 +149,13 @@ VOID CardPlaying::Update(VOID)
 								else if (ptCursor.y >= 157 + (25 * (y - 1))
 									&& ptCursor.y <= 157 + (25 * (y - 1)) + 150)
 								{
-									WCHAR msg[11];
-									wsprintfW(msg, TEXT("#%d CLICKED"), y);
-									MessageBox(hWnd, msg, TEXT("TEST"), MB_OK);
 									bClick = TRUE;
+									nStack = 1;
+									nIndex = y;
+									break;
+								}
+								else
+								{
 									break;
 								}
 							}
@@ -158,21 +163,50 @@ VOID CardPlaying::Update(VOID)
 								&& ptCursor.y >= 157 + (25 * (y - 1))
 								&& ptCursor.y <= 157 + (25 * y))
 							{
-								WCHAR msg[11];
-								wsprintfW(msg, TEXT("#%d CLICKED"), y);
-								MessageBox(hWnd, msg, TEXT("TEST"), MB_OK);
 								bClick = TRUE;
+								nStack = 1;
+								nIndex = y;
 								break;
 							}
 						}
 					}
 				}
+				// other stack
 				else
 				{
 					if (ptCursor.x >= 7 + (112 * x) && ptCursor.x <= 7 + (112 * (x + 1)))
 					{
-						bClick = TRUE;
-						break;
+						for (int y = 0; y < 25; ++y)
+						{
+							if (nCards[(6 + x) * 25 + y + nCardBacks[x - 1]] == -1)
+							{
+								if (y == 0)
+								{
+									break;
+								}
+								else if (ptCursor.y >= 157 + (nCardBacks[x - 1] * 10) + (25 * (y - 1))
+									&& ptCursor.y <= 157 + (nCardBacks[x - 1] * 10) + (25 * (y - 1)) + 150)
+								{
+									bClick = TRUE;
+									nStack = x + 1;
+									nIndex = y;
+									break;
+								}
+								else
+								{
+									break;
+								}
+							}
+							else if (y != 0
+								&& ptCursor.y >= 157 + (nCardBacks[x - 1] * 10) + (25 * (y - 1))
+								&& ptCursor.y <= 157 + (nCardBacks[x - 1] * 10) + (25 * y))
+							{
+								bClick = TRUE;
+								nStack = x + 1;
+								nIndex = y;
+								break;
+							}
+						}
 					}
 				}
 			}
@@ -185,7 +219,20 @@ VOID CardPlaying::Update(VOID)
 
 		if (bClick)
 		{
-			;
+			if (nStack == 1)
+			{
+				nCardSelects[0] = nCards[(nStack + 5) * 25 + nIndex - 1];
+				nCards[(nStack + 5) * 25 + nIndex - 1] = -1;
+				nStack = 0;
+				nIndex = 0;
+			}
+			else if (nStack > 1 && nStack <= 7)
+			{
+				nCardSelects[0] = nCards[(nStack + 5) * 25 + nCardBacks[nStack - 2] + nIndex - 1];
+				nCards[(nStack + 5) * 25 + nCardBacks[nStack - 2] + nIndex - 1] = -1;
+				nStack = 0;
+				nIndex = 0;
+			}
 		}
 	}
 	else
@@ -272,6 +319,18 @@ VOID CardPlaying::Draw(HDC hDC)
 			{
 				break;
 			}
+		}
+	}
+	// draw selected card
+	for (int x = 0; x < 13; ++x)
+	{
+		if (nCardSelects[x] != -1)
+		{
+			MyDrawImage(pImgList[nCardSelects[x]], ptCursor.x, ptCursor.y, 110, 150);
+		}
+		else
+		{
+			break;
 		}
 	}
 
