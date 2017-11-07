@@ -95,6 +95,11 @@ VOID CardPlaying::Initialize(HWND hWnd)
 	}
 	pImgList[13 * 4] = MyLoadImage(L"Back.raw", 110, 150);
 
+	nCards[2 * 25 + 0] = CardDiamond + CardAce;
+	nCards[3 * 25 + 0] = CardClover + CardAce;
+	nCards[4 * 25 + 0] = CardHeart + CardAce;
+	nCards[5 * 25 + 0] = CardHeart + CardTwo;
+
 	return;
 }
 
