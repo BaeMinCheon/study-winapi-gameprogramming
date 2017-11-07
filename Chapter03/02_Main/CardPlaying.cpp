@@ -237,6 +237,23 @@ VOID CardPlaying::Update(VOID)
 	}
 	else
 	{
+		if (ptCursor.y >= 157)
+		{
+			for (int x = 0; x < 7; ++x)
+			{
+				if (ptCursor.x >= 7 + (112 * x) && ptCursor.x <= 7 + (112 * x) + 110)
+				{
+					for (int y = 0; y < 25; ++y)
+					{
+						if (nCards[(6 + x) * 25 + y] == -1)
+						{
+							memcpy(nCards + (6 + x) * 25 + y, nCardSelects, sizeof(INT)*(24 - y > 13 ? 13 : 24 - y));
+							memset(nCardSelects, -1, sizeof(INT) * 13);
+						}
+					}
+				}
+			}
+		}
 		bClick = FALSE;
 		bPrevClick = FALSE;
 	}
