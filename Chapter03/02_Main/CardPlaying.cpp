@@ -6,10 +6,18 @@ MyImage* CardPlaying::pImgList[13 * 4 + 1] = { NULL };
 
 INT CardPlaying::nCards[13 * 25] = { 0 };
 INT CardPlaying::nCardBacks[6] = { 0 };
+INT CardPlaying::nCardSelects[13] = { 0 };
+
+HWND CardPlaying::hWnd = NULL;
+BOOL CardPlaying::bClick = FALSE;
+BOOL CardPlaying::bPrevClick = FALSE;
 
 VOID CardPlaying::Initialize(HWND hWnd)
 {
+	CardPlaying::hWnd = hWnd;
+
 	memset(nCards, -1, sizeof(INT) * 13 * 25);
+	memset(nCardSelects, -1, sizeof(INT) * 13);
 
 	DWORD dwRand = 0;
 	INT nTemp = 0;
@@ -100,6 +108,9 @@ VOID CardPlaying::Initialize(HWND hWnd)
 	}
 	pImgList[13 * 4] = MyLoadImage(L"Back.raw", 110, 150);
 
+	nCards[6 * 25 + 1] = CardClover + CardTen;
+	nCards[6 * 25 + 2] = CardDiamond + CardNine;
+
 	return;
 }
 
@@ -110,6 +121,79 @@ VOID CardPlaying::Release(VOID)
 
 VOID CardPlaying::Update(VOID)
 {
+	POINT ptCursor = { 0, 0 };
+
+	if ((GetKeyState(VK_LBUTTON) & 0x8000) && (GetActiveWindow() == hWnd))
+	{
+		GetCursorPos(&ptCursor);
+		ScreenToClient(hWnd, &ptCursor);
+
+		if (!bClick && !bPrevClick)
+		{
+			for (int x = 0; x < 7; ++x)
+			{
+				if (x == 0)
+				{
+					if (ptCursor.x >= 7 && ptCursor.x <= 117)
+					{
+						for (int y = 0; y < 25; ++y)
+						{
+							if (nCards[6 * 25 + y] == -1)
+							{
+								if (y == 0)
+								{
+									break;
+								}
+								else if (ptCursor.y >= 157 + (25 * (y - 1))
+									&& ptCursor.y <= 157 + (25 * (y - 1)) + 150)
+								{
+									WCHAR msg[11];
+									wsprintfW(msg, TEXT("#%d CLICKED"), y);
+									MessageBox(hWnd, msg, TEXT("TEST"), MB_OK);
+									bClick = TRUE;
+									break;
+								}
+							}
+							else if (y != 0
+								&& ptCursor.y >= 157 + (25 * (y - 1))
+								&& ptCursor.y <= 157 + (25 * y))
+							{
+								WCHAR msg[11];
+								wsprintfW(msg, TEXT("#%d CLICKED"), y);
+								MessageBox(hWnd, msg, TEXT("TEST"), MB_OK);
+								bClick = TRUE;
+								break;
+							}
+						}
+					}
+				}
+				else
+				{
+					if (ptCursor.x >= 7 + (112 * x) && ptCursor.x <= 7 + (112 * (x + 1)))
+					{
+						bClick = TRUE;
+						break;
+					}
+				}
+			}
+			bPrevClick = TRUE;
+		}
+		else
+		{
+			bPrevClick = TRUE;
+		}
+
+		if (bClick)
+		{
+			;
+		}
+	}
+	else
+	{
+		bClick = FALSE;
+		bPrevClick = FALSE;
+	}
+
 	return;
 }
 
