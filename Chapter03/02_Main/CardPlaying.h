@@ -34,6 +34,7 @@ namespace Scene
 		static INT nCards[13 * 25];
 		static INT nCardBacks[6];
 		static INT nCardSelects[13];
+		static INT nPrevIndex;
 
 		static HWND hWnd;
 		static POINT ptCursor;
