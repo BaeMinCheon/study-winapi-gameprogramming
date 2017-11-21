@@ -188,8 +188,37 @@ VOID MyDeleteImage(MyImage* pImg)
 
 VOID MyDrawImage(MyImage* pImg, INT X, INT Y, UINT iWidth, UINT iHeight)
 {
+	// destination size
+	RECT rcDest = { 0 };
+	// source size
+	RECT rcSrc = { 0 };
+
 	for (INT y = Y; y < static_cast<INT>(Y + iHeight); ++y)
 	{
-		memcpy(pMem + y * 800 * 4 + (X * 4), pImg->pData + (y - Y) * iWidth * 4, iWidth * 4);
+		if (y >= 0 && y < 600)
+		{
+			rcDest.left = X < 0 ? 0 : X;
+			rcDest.right = X + iWidth > 800 ? 800 : X + iWidth;
+
+			rcSrc.left = X > 0 ? 0 : -X;
+			rcSrc.right = X + iWidth > 800 ? iWidth - (X + iWidth - 800) : iWidth;
+
+			// out of display
+			if (rcDest.left <= -static_cast<INT>(iWidth)
+				|| rcDest.left >= 800)
+			{
+				return;
+			}
+			// out of display or source size
+			if (rcSrc.left >= static_cast<INT>(iWidth)
+				|| rcSrc.left >= 800)
+			{
+				return;
+			}
+
+			memcpy(pMem + y * 800 * 4 + (rcDest.left * 4),
+				pImg->pData + (y - Y) * iWidth * 4 + (rcSrc.left > iWidth ? iWidth : rcSrc.left) * 4,
+				((rcSrc.right - rcSrc.left) < 0 ? 0 : (rcSrc.right - rcSrc.left)) * 4);
+		}
 	}
 }
