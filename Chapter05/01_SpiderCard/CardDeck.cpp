@@ -943,12 +943,82 @@ struct CSpiderList : public CList
 
 BOOL CSpiderList::QueryPlace(CardDeck* pDeck)
 {
-	return false;
+	CSpiderList* pRaw = NULL;
+
+	pRaw = reinterpret_cast<CSpiderList*>(pDeck);
+	if (!pRaw)
+	{
+		return FALSE;
+	}
+
+	if (pRaw->piList && piList)
+	{
+		if (piList[iSize - 1] % 13 - 1 == pRaw->piList[0] % 13)
+		{
+			CList::QueryPlace(pDeck);
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
 BOOL CSpiderList::QueryPull(UINT iCount, CardDeck* pDeck)
 {
-	return false;
+	CSpiderList* pRaw = NULL;
+
+	BOOL bSuccess = TRUE;
+
+	if (iCount == 0)
+	{
+		if (iSize != 0
+			&& iBacks != 0
+			&& iSize == iBacks)
+		{
+			--iBacks;
+		}
+	}
+
+	pRaw = reinterpret_cast<CSpiderList*>(pDeck);
+	if (!pRaw)
+	{
+		return FALSE;
+	}
+	if (iSize - iBacks < iCount)
+	{
+		return FALSE;
+	}
+	if (iCount != 1)
+	{
+		for (int x = 0; x < iCount; ++x)
+		{
+			if ((piList[iSize - x - 1] % 13) - 1 != (piList[iSize - (x + 1) - 1] % 13))
+			{
+				bSuccess = FALSE;
+				break;
+			}
+		}
+	}
+
+	if (bSuccess)
+	{
+		if (pRaw->piList)
+		{
+			free(pRaw->piList);
+			pRaw->piList = NULL;
+		}
+
+		pRaw->piList = reinterpret_cast<UINT*>(malloc(sizeof(UINT)*iCount));
+		if (!pRaw->piList)
+		{
+			return FALSE;
+		}
+
+		memcpy(pRaw->piList, piList + iSize - iCount, sizeof(UINT)*iCount);
+		pRaw->iSize = iCount;
+
+		iSize -= iCount;
+	}
+	return bSuccess;
 }
 
 VOID CSpiderList::Draw(INT X, INT Y)
