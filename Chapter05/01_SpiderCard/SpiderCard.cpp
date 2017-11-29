@@ -63,6 +63,7 @@ VOID SpiderCard::Update(VOID)
 {
 	POINT ptCursor = { 0 };
 	UINT iIndex = 0;
+	BOOL bSuccess = TRUE;
 
 	GetCursorPos(&ptCursor);
 	ScreenToClient(hWnd, &ptCursor);
@@ -73,6 +74,7 @@ VOID SpiderCard::Update(VOID)
 		{
 			bClick = bPrevClick = TRUE;
 
+			// click on List : pick one card
 			for (int x = 0; x < 10; ++x)
 			{
 				iIndex = pList[x]->QueryIndex(ptCursor.x, ptCursor.y);
@@ -81,6 +83,40 @@ VOID SpiderCard::Update(VOID)
 					pList[x]->QueryPull(iIndex, pTemp);
 					pPrev = pList[x];
 					break;
+				}
+			}
+			// click on Deck : scatter cards
+			for (int x = 0; x < 5; ++x)
+			{
+				if (pDeck[x]->QueryIndex(ptCursor.x, ptCursor.y))
+				{
+					for (int y = 0; y < 10; ++y)
+					{
+						if (pList[x]->QueryPull(1, pTemp))
+						{
+							pList[x]->QueryReplace(pTemp);
+						}
+						else
+						{
+							bSuccess = FALSE;
+						}
+					}
+
+					if (bSuccess)
+					{
+						CardDeck* pLocal = NULL;
+
+						for (int y = 0; y < 10; ++y)
+						{
+							pDeck[0]->QueryPull(1, pTemp);
+							pList[y]->QueryReplace(pTemp);
+						}
+
+						pLocal = pDeck[0];
+						memcpy(pDeck, pDeck + 1, sizeof(CardDeck*) * 4);
+						pDeck[4] = pLocal;
+						break;
+					}
 				}
 			}
 		}
@@ -93,7 +129,7 @@ VOID SpiderCard::Update(VOID)
 	{
 		if (bClick)
 		{
-			BOOL bSuccess = FALSE;
+			bSuccess = FALSE;
 
 			for (int x = 0; x < 10; ++x)
 			{
@@ -134,6 +170,10 @@ VOID SpiderCard::Update(VOID)
 
 VOID SpiderCard::Draw(HDC hDC)
 {
+	POINT ptCursor = { 0 };
+	GetCursorPos(&ptCursor);
+	ScreenToClient(hWnd, &ptCursor);
+
 	MyClear();
 
 	for (int x = 0; x < 10; ++x)
@@ -148,6 +188,7 @@ VOID SpiderCard::Draw(HDC hDC)
 	{
 		pComplete[x]->Draw(3 + 25 * x, 597 - 150);
 	}
+	pTemp->Draw(ptCursor.x - 55, ptCursor.y - 75);
 
 	MyFinish();
 	return;
