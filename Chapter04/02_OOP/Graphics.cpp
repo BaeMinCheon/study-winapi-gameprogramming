@@ -188,37 +188,25 @@ VOID MyDeleteImage(MyImage* pImg)
 
 VOID MyDrawImage(MyImage* pImg, INT X, INT Y, UINT iWidth, UINT iHeight)
 {
-	// destination size
-	RECT rcDest = { 0 };
-	// source size
-	RECT rcSrc = { 0 };
+	DOUBLE alpha = 0.0;
 
-	for (INT y = Y; y < static_cast<INT>(Y + iHeight); ++y)
+	for (int x = X; x < X + iWidth; ++x)
 	{
-		if (y >= 0 && y < 600)
+		if (x < 0 || x >= 800)
 		{
-			rcDest.left = X < 0 ? 0 : X;
-			rcDest.right = X + iWidth > 800 ? 800 : X + iWidth;
-
-			rcSrc.left = X > 0 ? 0 : -X;
-			rcSrc.right = X + iWidth > 800 ? iWidth - (X + iWidth - 800) : iWidth;
-
-			// out of display
-			if (rcDest.left <= -static_cast<INT>(iWidth)
-				|| rcDest.left >= 800)
+			continue;
+		}
+		for (int y = Y; y < Y + iHeight; ++y)
+		{
+			if (y < 0 || y >= 600)
 			{
-				return;
+				continue;
 			}
-			// out of display or source size
-			if (rcSrc.left >= static_cast<INT>(iWidth)
-				|| rcSrc.left >= 800)
-			{
-				return;
-			}
-
-			memcpy(pMem + y * 800 * 4 + (rcDest.left * 4),
-				pImg->pData + (y - Y) * iWidth * 4 + (rcSrc.left > iWidth ? iWidth : rcSrc.left) * 4,
-				((rcSrc.right - rcSrc.left) < 0 ? 0 : (rcSrc.right - rcSrc.left)) * 4);
+			int temp = (y - Y)*iWidth * 4 + (x - X) * 4;
+			alpha = static_cast<DOUBLE>(pImg->pData[temp + 3]) / 255.0;
+			pMem[y * 800 * 4 + x * 4 + 0] = (pMem[y * 800 * 4 + x * 4 + 0] * (1.0 - alpha)) + (pImg->pData[temp + 0] * alpha);
+			pMem[y * 800 * 4 + x * 4 + 1] = (pMem[y * 800 * 4 + x * 4 + 1] * (1.0 - alpha)) + (pImg->pData[temp + 1] * alpha);
+			pMem[y * 800 * 4 + x * 4 + 2] = (pMem[y * 800 * 4 + x * 4 + 2] * (1.0 - alpha)) + (pImg->pData[temp + 2] * alpha);
 		}
 	}
 }

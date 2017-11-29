@@ -7,6 +7,7 @@ MyImage* CardPlaying::pImgList[13 * 4 + 1] = { NULL };
 INT CardPlaying::nCards[13 * 25] = { 0 };
 INT CardPlaying::nCardBacks[6] = { 0 };
 INT CardPlaying::nCardSelects[13] = { 0 };
+INT CardPlaying::nPrevIndex = 0;
 
 HWND CardPlaying::hWnd = NULL;
 POINT CardPlaying::ptCursor = { 0,0 };
@@ -111,8 +112,11 @@ VOID CardPlaying::Initialize(HWND hWnd)
 	}
 	pImgList[13 * 4] = MyLoadImage(L"Back.raw", 110, 150);
 
-	nCards[6 * 25 + 1] = CardClover + CardTen;
-	nCards[6 * 25 + 2] = CardDiamond + CardNine;
+	nCards[6 * 25 + 1] = CardSpade + CardAce;
+	nCards[6 * 25 + 2] = CardSpade + CardKing;
+	nCards[6 * 25 + 3] = CardHeart + CardQueen;
+	nCards[6 * 25 + 4] = CardClover + CardJack;
+	nCards[6 * 25 + 5] = CardDiamond + CardTen;
 
 	return;
 }
@@ -124,6 +128,10 @@ VOID CardPlaying::Release(VOID)
 
 VOID CardPlaying::Update(VOID)
 {
+	BOOL bSuccess = FALSE;
+	INT nCardNum = 0;
+	INT nCardType = 0;
+
 	if ((GetKeyState(VK_LBUTTON) & 0x8000) && (GetActiveWindow() == hWnd))
 	{
 		GetCursorPos(&ptCursor);
@@ -219,17 +227,78 @@ VOID CardPlaying::Update(VOID)
 
 		if (bClick)
 		{
+			bSuccess = TRUE;
 			if (nStack == 1)
 			{
-				nCardSelects[0] = nCards[(nStack + 5) * 25 + nIndex - 1];
-				nCards[(nStack + 5) * 25 + nIndex - 1] = -1;
+				for (int x = 0; x < 13; ++x)
+				{
+					int temp = (nStack + 5) * 25 + nIndex + (x - 1);
+					// Spade or Clover
+					if (nCards[temp] / 13 == 0
+						|| nCards[temp] / 13 == 3)
+					{
+						if (nCards[temp + 1] == -1)
+						{
+							break;
+						}
+						else if (nCards[temp + 1] / 13 != -1
+							&& nCards[temp + 1] / 13 != 1
+							&& nCards[temp + 1] / 13 != 2)
+						{
+							bSuccess = FALSE;
+							break;
+						}
+						else if (nCards[temp + 1] % 13 + 1 != nCards[temp] % 13)
+						{
+							bSuccess = FALSE;
+							break;
+						}
+					}
+					// Heart or Diamond
+					else if (nCards[temp] / 13 == 1
+						|| nCards[temp] / 13 == 2)
+					{
+						if (nCards[temp + 1] == -1)
+						{
+							break;
+						}
+						else if (nCards[temp + 1] / 13 != -1
+							&& nCards[temp + 1] / 13 != 0
+							&& nCards[temp + 1] / 13 != 3)
+						{
+							bSuccess = FALSE;
+							break;
+						}
+						else if (nCards[temp + 1] % 13 + 1 != nCards[temp] % 13)
+						{
+							bSuccess = FALSE;
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+				if (bSuccess)
+				{
+					int temp = (nStack + 5) * 25 + nIndex - 1;
+					memcpy(nCardSelects, nCards + temp, sizeof(INT) * 13);
+					memset(nCards + temp, -1, sizeof(INT) * 13);
+					nPrevIndex = temp;
+				}
 				nStack = 0;
 				nIndex = 0;
 			}
 			else if (nStack > 1 && nStack <= 7)
 			{
-				nCardSelects[0] = nCards[(nStack + 5) * 25 + nCardBacks[nStack - 2] + nIndex - 1];
-				nCards[(nStack + 5) * 25 + nCardBacks[nStack - 2] + nIndex - 1] = -1;
+				for (int x = 0; x < 13; ++x)
+				{
+					int temp = (nStack + 5) * 25 + nCardBacks[nStack - 2] + nIndex + (x - 1);
+					nCardSelects[x] = nCards[temp];
+					nCards[temp] = -1;
+				}
+				nPrevIndex = (nStack + 5) * 25 + nCardBacks[nStack - 2] + nIndex - 1;
 				nStack = 0;
 				nIndex = 0;
 			}
@@ -247,13 +316,63 @@ VOID CardPlaying::Update(VOID)
 					{
 						if (nCards[(6 + x) * 25 + y] == -1)
 						{
-							memcpy(nCards + (6 + x) * 25 + y, nCardSelects, sizeof(INT)*(24 - y > 13 ? 13 : 24 - y));
-							memset(nCardSelects, -1, sizeof(INT) * 13);
+							// number of card (A to K)
+							nCardNum = nCardSelects[0] % 13;
+							// shape of card
+							nCardType = nCardSelects[0] / 13;
+
+							int temp = (6 + x) * 25 + y - 1;
+							if (nCardType == 1 || nCardType == 2)
+							{
+								nCardType = nCards[temp] / 13;
+								if (nCardType == 0 || nCardType == 3)
+								{
+									if (nCards[temp] % 13 == nCardNum + 1)
+									{
+										bSuccess = TRUE;
+									}
+								}
+							}
+							else
+							{
+								nCardType = nCards[temp] / 13;
+								if (nCardType == 0 || nCardType == 3)
+								{
+									if (nCards[temp] % 13 == nCardNum + 1)
+									{
+										bSuccess = TRUE;
+									}
+								}
+							}
+							if (bSuccess)
+							{
+								memcpy(nCards + (6 + x) * 25 + y, nCardSelects, sizeof(INT)*(24 - y > 13 ? 13 : 24 - y));
+								memset(nCardSelects, -1, sizeof(INT) * 13);
+								goto _CONTINUE;
+							}
 						}
 					}
 				}
 			}
 		}
+	_CONTINUE:
+		if (!bSuccess)
+		{
+			if (nPrevIndex != 0)
+			{
+				for (int x = 0; x < 13; ++x)
+				{
+					if (nCardSelects[x] == -1)
+					{
+						memcpy(nCards + nPrevIndex, nCardSelects, sizeof(INT)*x);
+						memset(nCardSelects, -1, sizeof(INT) * 13);
+						break;
+					}
+				}
+				nPrevIndex = 0;
+			}
+		}
+
 		bClick = FALSE;
 		bPrevClick = FALSE;
 	}

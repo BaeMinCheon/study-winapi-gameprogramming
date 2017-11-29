@@ -4,7 +4,7 @@
 
 namespace Scene
 {
-	class CardPlaying
+	class SpiderCard
 	{
 	public:
 		enum
@@ -30,18 +30,6 @@ namespace Scene
 		};
 
 		static MyImage* pImgList[13 * 4 + 1];
-
-		static INT nCards[13 * 25];
-		static INT nCardBacks[6];
-		static INT nCardSelects[13];
-		static INT nPrevIndex;
-
-		static HWND hWnd;
-		static POINT ptCursor;
-		static BOOL bClick;
-		static BOOL bPrevClick;
-		static SHORT nStack;
-		static SHORT nIndex;
 
 		static VOID Initialize(HWND hWnd);
 		static VOID Release(VOID);
