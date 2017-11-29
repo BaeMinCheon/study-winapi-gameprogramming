@@ -7,13 +7,13 @@ interface CardDeck
 {
 	static VOID Initialize(VOID);
 
-	// can i put a card(or cards) on this ?
+	// can i put a card(or cards) on this ? (from pDeck to this)
 	virtual BOOL QueryPlace(CardDeck* pDeck) PURE;
-	// can i take a card(or cards) from this ?
+	// can i take a card(or cards) from this ? (from this to pPuller)
 	virtual BOOL QueryPull(UINT iCount, CardDeck* pPuller) PURE;
 	// which position did i clicked ?
 	virtual UINT QueryIndex(INT X, INT Y) PURE;
-	// get back a card(or cards) when it failed to move
+	// get back a card(or cards) when it failed to move (from pDeck to this)
 	virtual VOID QueryReplace(CardDeck* pDeck) PURE;
 
 	virtual VOID Draw(INT X, INT Y) PURE;

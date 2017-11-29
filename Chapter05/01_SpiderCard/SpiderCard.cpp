@@ -61,6 +61,74 @@ VOID SpiderCard::Release(VOID)
 
 VOID SpiderCard::Update(VOID)
 {
+	POINT ptCursor = { 0 };
+	UINT iIndex = 0;
+
+	GetCursorPos(&ptCursor);
+	ScreenToClient(hWnd, &ptCursor);
+
+	if ((GetKeyState(VK_LBUTTON) & 0x8000) && (GetActiveWindow() == hWnd))
+	{
+		if (!bClick && !bPrevClick)
+		{
+			bClick = bPrevClick = TRUE;
+
+			for (int x = 0; x < 10; ++x)
+			{
+				iIndex = pList[x]->QueryIndex(ptCursor.x, ptCursor.y);
+				if (iIndex)
+				{
+					pList[x]->QueryPull(iIndex, pTemp);
+					pPrev = pList[x];
+					break;
+				}
+			}
+		}
+		else
+		{
+			bPrevClick = TRUE;
+		}
+	}
+	else
+	{
+		if (bClick)
+		{
+			BOOL bSuccess = FALSE;
+
+			for (int x = 0; x < 10; ++x)
+			{
+				if (pList[x]->QueryIndex(ptCursor.x, ptCursor.y))
+				{
+					if (!pList[x]->QueryPlace(pTemp))
+					{
+						if (pPrev)
+						{
+							pPrev->QueryReplace(pTemp);
+						}
+					}
+					else if(pPrev)
+					{
+						pPrev->QueryPull(0, NULL);
+					}
+
+					pPrev = NULL;
+					bSuccess = TRUE;
+					break;
+				}
+			}
+
+			if (!bSuccess)
+			{
+				if (pPrev)
+				{
+					pPrev->QueryReplace(pTemp);
+				}
+			}
+		}
+
+		bClick = bPrevClick = FALSE;
+	}
+
 	return;
 }
 
