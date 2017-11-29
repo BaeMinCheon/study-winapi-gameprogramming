@@ -1,5 +1,0 @@
-﻿  First.cpp
-c:\users\zeble\documents\visual studio 2015\projects\[study] gamemakingproject\0 - introduction\chapter00\00_first\first.cpp(39): warning C4302: '형식 캐스팅': 'LPWSTR'에서 'WORD'(으)로 잘립니다.
-c:\users\zeble\documents\visual studio 2015\projects\[study] gamemakingproject\0 - introduction\chapter00\00_first\first.cpp(40): warning C4302: '형식 캐스팅': 'LPWSTR'에서 'WORD'(으)로 잘립니다.
-  00_First.vcxproj -> C:\Users\zeble\Documents\Visual Studio 2015\Projects\[STUDY] GameMakingProject\0 - Introduction\Chapter00\Debug\00_First.exe
-  00_First.vcxproj -> C:\Users\zeble\Documents\Visual Studio 2015\Projects\[STUDY] GameMakingProject\0 - Introduction\Chapter00\Debug\00_First.pdb (Full PDB)
